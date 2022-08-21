@@ -147,6 +147,9 @@ router.post("/", auth.required, function(req, res, next) {
       var item = new Item(req.body.item);
 
       item.seller = user;
+      if (!item.image) {
+        return res.status(400).json({msg: "Item does not contains image. Please add image and try again"}).send();
+      }
 
       return item.save().then(function() {
         sendEvent('item_created', { item: req.body.item })
